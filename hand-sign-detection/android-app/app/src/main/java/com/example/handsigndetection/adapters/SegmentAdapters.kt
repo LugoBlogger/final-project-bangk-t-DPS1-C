@@ -1,16 +1,23 @@
 package com.example.handsigndetection.adapters
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.handsigndetection.activity.ImageActivity
 import com.example.handsigndetection.R
+import com.example.handsigndetection.service.Utility
+import com.example.handsigndetection.handler.ImageHandler
+import com.example.handsigndetection.model.Image
 import com.example.handsigndetection.model.Segment
 
-class SegmentAdapters(private val segments: ArrayList<Segment>): RecyclerView.Adapter<SegmentAdapters.ViewHolder>() {
+class SegmentAdapters(var context: Context, private val segments: ArrayList<Segment>): RecyclerView.Adapter<SegmentAdapters.ViewHolder>() {
 
     companion object {
         val INTENT_PARCELABLE = "IMAGE_INTENT"
@@ -38,15 +45,19 @@ class SegmentAdapters(private val segments: ArrayList<Segment>): RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val segment: Segment = segments[position]
+        val segment: Segment = segments.get(position)
         holder.titleTextView.text = segment.result
-        holder.subtitleTextView.text = segment.average
-        holder.imageView.setImageResource(segment.images[0].file)
-        holder.imageView2.setImageResource(segment.images[1].file)
-        holder.imageView3.setImageResource(segment.images[2].file)
+        holder.subtitleTextView.text = segment.date
+
+        val imageHandler: ImageHandler = ImageHandler(context)
+        var images: ArrayList<Image> = imageHandler.collectBySegment(segment.id)
+        val utility: Utility = Utility()
+        holder.imageView.setImageBitmap(utility.byteArrayToBitmap(images.get(0).file))
+        holder.imageView2.setImageBitmap(utility.byteArrayToBitmap(images.get(1).file))
+        holder.imageView3.setImageBitmap(utility.byteArrayToBitmap(images.get(2).file))
 
         holder.itemView.setOnClickListener { view: View ->
-            val intent: Intent = Intent(view.context, ImageActivity::class.java)
+            val intent: Intent = Intent(context, ImageActivity::class.java)
             intent.putExtra(INTENT_PARCELABLE, segment)
             view.context.startActivity(intent)
         }

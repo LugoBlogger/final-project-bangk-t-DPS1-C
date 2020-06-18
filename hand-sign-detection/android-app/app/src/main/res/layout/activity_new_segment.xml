@@ -5,7 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.NewSegmentActivity">
+    tools:context=".activity.NewSegmentActivity"
+    android:background="#ffffff">
+
+
 
     <GridView
         android:id="@+id/gridView"

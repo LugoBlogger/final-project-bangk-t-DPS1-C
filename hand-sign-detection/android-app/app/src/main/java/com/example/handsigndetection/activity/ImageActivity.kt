@@ -10,24 +10,31 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.handsigndetection.R
 import com.example.handsigndetection.adapters.ImageAdapters
+import com.example.handsigndetection.handler.ImageHandler
 import com.example.handsigndetection.model.Image
 import com.example.handsigndetection.model.Segment
 
 class ImageActivity : AppCompatActivity() {
-    private var images: ArrayList<Image>? = null
+    private var images: ArrayList<Image>? = ArrayList<Image>()
     private var gridView: GridView? = null
     private var imageAdapters: ImageAdapters? = null
-
-//    companion object {
-//        val INTENT_PARCELABLE = "PREDICTION_INTENT"
-//    }
+    private var imageHandler: ImageHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
+        initInformation()
+        initGridView()
+        initActionBar()
+    }
 
+
+
+    // ALL ABOUT INITIALIZATION OF UI COMPONENT (START)
+    private fun initInformation() {
         val segment: Segment = intent.getParcelableExtra<Segment>("IMAGE_INTENT")
-        images = segment.images
+        imageHandler = ImageHandler(this)
+        images = imageHandler?.collectBySegment(segment.id)
 
         var dateTextView: TextView = findViewById(R.id.dateTextView)
         dateTextView.text = segment.date
@@ -38,33 +45,25 @@ class ImageActivity : AppCompatActivity() {
         var averageTextView: TextView = findViewById(R.id.accuracyTextView)
         averageTextView.text = segment.average
 
-        gridView = findViewById(R.id.gridView)
-        imageAdapters = ImageAdapters(
-            applicationContext,
-            images!!
-        )
-        gridView?.adapter = imageAdapters
+    }
 
+    private fun initGridView() {
+        gridView = findViewById(R.id.gridView)
+        imageAdapters = ImageAdapters(this, images!!)
+        gridView?.adapter = imageAdapters
+    }
+
+    private fun initActionBar() {
         val actionbar = supportActionBar
         actionbar!!.title = "Detail Segment"
         actionbar.setDisplayHomeAsUpEnabled(true)
         actionbar.setDisplayHomeAsUpEnabled(true)
-
-
-//        gridView?.onItemClickListener = this
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
-
-//    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//        val image: Image = images!!.get(position)
-//        Toast.makeText(applicationContext, "Test", Toast.LENGTH_SHORT).show()
-////        val intent: Intent = Intent(applicationContext, PredictionActivity::class.java)
-////        intent.putExtra(INTENT_PARCELABLE, image)
-////        applicationContext.startActivity(intent)
-//    }
+    // ALL ABOUT INITIALIZATION OF UI COMPONENT (END)
 
 }
