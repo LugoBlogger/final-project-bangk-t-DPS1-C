@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.PredictionActivity">
+    tools:context=".activity.PredictionActivity"
+    android:background="#ffffff">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,8 +17,9 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_launcher_background"
             />
     </androidx.cardview.widget.CardView>

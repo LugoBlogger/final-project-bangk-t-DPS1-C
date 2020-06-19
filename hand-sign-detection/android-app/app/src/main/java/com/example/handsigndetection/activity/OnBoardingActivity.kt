@@ -10,10 +10,13 @@ class OnBoardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_boarding)
+        initButton()
+    }
 
+    private fun initButton() {
         val getStartedButton: Button = findViewById(R.id.getStartedButton)
         getStartedButton.setOnClickListener {
-            val intent: Intent = Intent(applicationContext, SegmentActivity::class.java)
+            val intent: Intent = Intent(this, SegmentActivity::class.java)
             startActivity(intent)
         }
     }

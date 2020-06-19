@@ -22,8 +22,7 @@ class PredictionAdapters(var context: Context, private val predictions: ArrayLis
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view: View = View.inflate(context,
-            R.layout.card_prediction, null)
+        var view: View = View.inflate(context, R.layout.card_prediction, null)
         var rankTextView: TextView = view.findViewById(R.id.rankTextView)
         var alphabetTextView: TextView = view.findViewById(R.id.alphabetTextView)
         var accuracyTextView: TextView = view.findViewById(R.id.accuracyTextView)
