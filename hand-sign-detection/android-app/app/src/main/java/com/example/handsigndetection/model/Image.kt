@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Image (
-    val file: Int,
-    val predictions: ArrayList<Prediction>
+    var id: Int = 0,
+    var file: ByteArray? = null,
+    var segmentId: Int = -1
 ) : Parcelable

@@ -5,6 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Prediction(
-    val alphabet: String,
-    val accuracy: String
+    var id: Int = 0,
+    var alphabet: String = "",
+    var accuracy: String = "",
+    var imageId: Int = -1
 ) : Parcelable
