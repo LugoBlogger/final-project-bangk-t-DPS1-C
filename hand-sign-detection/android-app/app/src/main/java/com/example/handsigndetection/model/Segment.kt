@@ -5,8 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Segment (
-    val date: String,
-    val result: String,
-    val average: String,
-    val images: ArrayList<Image>
+    var id: Int = 0,
+    var date: String = "",
+    var result: String = "",
+    var average: String = ""
 ) : Parcelable

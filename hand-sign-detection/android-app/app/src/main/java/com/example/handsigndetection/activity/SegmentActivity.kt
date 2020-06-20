@@ -6,11 +6,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.handsigndetection.R
 import com.example.handsigndetection.adapters.SegmentAdapters
+import com.example.handsigndetection.handler.ImageHandler
+import com.example.handsigndetection.handler.PredictionHandler
+import com.example.handsigndetection.handler.SegmentHandler
 import com.example.handsigndetection.model.Segment
 import com.example.handsigndetection.model.Image
 import com.example.handsigndetection.model.Prediction
@@ -20,40 +25,25 @@ import kotlinx.android.synthetic.main.activity_segment.*
 class SegmentActivity : AppCompatActivity() {
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerView.Adapter<SegmentAdapters.ViewHolder>? = null
+    private var segmentHandler: SegmentHandler? = null
+    private var segments: ArrayList<Segment>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_segment)
-
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-
-        adapter =
-            SegmentAdapters(getDataList())
-        recyclerView.adapter = adapter
-
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            val intent: Intent = Intent(applicationContext, NewSegmentActivity::class.java)
-            startActivity(intent)
-        }
+        initRecyclerView()
+        initAddButton()
     }
 
-    private fun getDataList(): ArrayList<Segment>  {
-        var predictions: ArrayList<Prediction> = ArrayList()
-        predictions.add(Prediction("N", "0.96"))
-        predictions.add(Prediction("M", "0.86"))
-        predictions.add(Prediction("0", "0.76"))
 
-        var images: ArrayList<Image> = ArrayList()
-        images.add(Image(R.drawable.n, predictions))
-        images.add(Image(R.drawable.e, predictions))
-        images.add(Image(R.drawable.w, predictions))
-
-        var segments: ArrayList<Segment> = ArrayList()
-        segments.add(Segment("22 June 2020", "NEW", "0.87", images))
-        segments.add(Segment("22 June 2020", "NEW", "0.87", images))
-
-        return segments
+    // ALL ABOUT INITIALIZATION OF UI COMPONENT (START)
+    private fun initRecyclerView() {
+        layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        segmentHandler = SegmentHandler(this)
+        segments = segmentHandler?.readAll()
+        adapter = SegmentAdapters(this, segments!!)
+        recyclerView.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -81,4 +71,19 @@ class SegmentActivity : AppCompatActivity() {
 
         return true
     }
+    // ALL ABOUT INITIALIZATION OF UI COMPONENT (END)
+
+
+
+    // FLOATING ACTION BUTTON FUNCTION (START)
+    private fun initAddButton() {
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            val intent: Intent = Intent(this, NewSegmentActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    // FLOATING ACTION BUTTON FUNCTION (END)
+
+
+
 }
