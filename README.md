@@ -68,7 +68,7 @@ root
 
 All of our models have fixed hyperparameters (`learning rate = 1e-5`, `max_epochs = 100`, and `accuracy >= 0.9`) (but you can change it as you want to explore more possibilities).
 
-- For baseline model (`classif-pre-trained-baseline-DataSet-Signos.ipynb`), we choose the following layers structure (based on CNN Coursera course, with a little modification) and use Adam optimizers.
+- For baseline model (`classif-pre-trained-baseline-DataSet-Signos.ipynb`), we choose the following layer structures (based on CNN Coursera course, with a little modification) and use Adam optimizer.
      ```py
      model = tf.keras.Sequential([
           base_model,  # MobileNet V2
@@ -99,6 +99,7 @@ All of our models have fixed hyperparameters (`learning rate = 1e-5`, `max_epoch
      ```
      
 ### Table of comparison
+(see all the result for the graph of accuracy and loss for each models in `slides-image-resources`)
 
 |                     | baseline     | Adam        | RMSprop     | SGD          |
 |:-                   | :-:          | :-:         | :-:         | :-:          |
@@ -107,7 +108,14 @@ All of our models have fixed hyperparameters (`learning rate = 1e-5`, `max_epoch
 
 Fom the above table, we see that Adam and RMSprop give two reliable results with small maximum epochs to attain accuracy greater than or equal to 0.9.
 We see an improvement in time to train and also memory consumption to store `.tflite` (less layer, less memory consumption). 
-     
+
+## Further development
+
+- Gathering dataset to improve generality of the model.
+- Add new pipeline for image detection and hand tracking (we found [this](https://ai.googleblog.com/2019/08/on-device-real-time-hand-tracking-with.html) incredible implementation using [MediaPipe](https://mediapipe.dev/)). 
+- Implement our UI desing from `android-app` to existing model.
+- Build several testing procedure to improve the quality of the app.
+
 ## Our team
 
 - Kevin Chandra (`simple-ui-android-app`)
