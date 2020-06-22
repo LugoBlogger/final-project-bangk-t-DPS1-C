@@ -37,7 +37,8 @@ public class ClassifierCustomModel extends Classifier {
         // you can download this file from
         // see build.gradle for where to obtain this file. It should be auto
         // downloaded into assets.
-        return "model.tflite";
+        //return "model.tflite";
+        return "classif_preTrained.tflite";
     }
 
     @Override
