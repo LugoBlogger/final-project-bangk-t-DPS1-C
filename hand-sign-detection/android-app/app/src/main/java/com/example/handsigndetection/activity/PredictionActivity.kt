@@ -3,6 +3,7 @@ package com.example.handsigndetection.activity
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.GridView
 import android.widget.ImageView
 import com.example.handsigndetection.adapters.PredictionAdapters
@@ -18,12 +19,20 @@ class PredictionActivity : AppCompatActivity() {
     private var predictionAdapters: PredictionAdapters? = null
     private var predictionHandler: PredictionHandler? = null
 
+    private val TAG = "PredictionActivity"
+    private var tfLiteClassifier: TFLiteClassifier = TFLiteClassifier(this@PredictionActivity)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_prediction)
         initInformation()
         initGridView()
         initActionBar()
+
+        tfLiteClassifier
+            .initialize()
+            .addOnSuccessListener { }
+            .addOnFailureListener { e -> Log.e(TAG, "Error in setting up the classifier.", e) }
     }
 
 
