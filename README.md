@@ -62,14 +62,52 @@ root
      
      Change string text after `return` into your new `.tflite` filename.
      
- 5. Run the app, by clicking toolbar menu `Run` -> `Run 'app'`.
+ 5. Run the app, by clicking toolbar menu `Run` -> `Run 'app'` in Android Studio.
 
 ## Several results
 
-For baseline model (`classif-pre-trained-baseline-DataSet-Signos.ipynb`), we choose the following layers structure (based on CNN Coursera course, with a little tweaking)
+All of our models have fixed hyperparameters (`learning rate = 1e-5`, `max_epochs = 100`, and `accuracy >= 0.9`) (but you can change it as you want to explore more possibilities).
 
--
+- For baseline model (`classif-pre-trained-baseline-DataSet-Signos.ipynb`), we choose the following layers structure (based on CNN Coursera course, with a little modification) and use Adam optimizers.
+     ```py
+     model = tf.keras.Sequential([
+          base_model,  # MobileNet V2
+          tf.keras.layers.Conv2D(32, (5,5), activation='relu'),
+          tf.keras.layers.Dropout(0.2),
+          tf.keras.layers.GlobalAveragePooling2D(),
+          tf.keras.layers.Dense(256, activation='relu'),
+          tf.keras.layers.Dropout(0.5),
+          tf.keras.layers.Dense(num_classes, activation="softmax")])
+     ```
+     <p align="center">
+     <img src="https://raw.githubusercontent.com/LugoBlogger/final-project-bangkit-DPS1-C/master/slide-image-resources/baseline-fine.png" width="500"/>
+     </p>
+ 
+     As we can see after 100 epochs, the accuracy does not go much higher than 0.9. Then the next graph (right to the vertical green line), after we unfreeze some layer from MobileNet V2, doesn't give any improvement. 
 
+
+- We tried several improvement by changing the optimizers. We get that changing the optimizers gives much faster to attain accuracy `>= 0.9` for small `max_epochs`. For (Adam, RMSprop, and SGD), we simplify `GlobalAveragePooling2D()` to `Flatten()` and remove `Conv2D` and `Dropout(0.2)`. This means that we do improvement by finding the right optimizer and reduce the layers. We reduce the layers because small dataset is easily prone of overfitting. We choose this improvement because it is the simpler one to fight overfitting (even though we still have overfitting because of the very few numbers of our dataset).
+
+     The following lines are layers in three models (Adams, RMSprop, and SGD).
+     ```py
+     model = tf.keras.Sequential([
+          base_model,  # MobileNet V2
+          tf.keras.layers.Flatten(),
+          tf.keras.layers.Dense(256, activation='relu'),
+          tf.keras.layers.Dropout(0.5),
+          tf.keras.layers.Dense(num_classes, activation="softmax")])
+     ```
+     
+### Table of comparison
+
+|                     | baseline     | Adam        | RMSprop     | SGD          |
+|:-                   | :-:          | :-:         | :-:         | :-:          |
+| time/epoch          | ~ 30 s       | ~ 44 s      | ~ 45 s      | ~ 40 s       |
+| reach acc >= 0.9 in | > 100 epochs | ~ 14 epochs | ~ 16 epochs | > 100 epochs |
+
+Fom the above table, we see that Adam and RMSprop give two reliable results with small maximum epochs to attain accuracy greater than or equal to 0.9.
+We see an improvement in time to train and also memory consumption to store `.tflite` (less layer, less memory consumption). 
+     
 ## Our team
 
 - Kevin Chandra (`simple-ui-android-app`)
